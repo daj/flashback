@@ -5,6 +5,8 @@ import android.app.ActivityManager.RunningTaskInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -18,6 +20,21 @@ public class CustomPhoneStateListener extends BroadcastReceiver {
     // Set the maximum number of times we should wait for the
     // incoming call screen to appear
     final static int MAX_LAUNCH_ATTEMPTS = 10;
+
+    // Bring to front delay interval when trying to cope with 3rd party
+    // apps appearing on top of Flashback, in milliseconds
+    final static int BRING_TO_FRONT_PERIOD = 500;
+
+    // Set the maximum number of times we should check for bringing
+    // Flashback to the front of any 3rd party apps
+    final static int MAX_BRING_TO_FRONT_ATTEMPTS = 4;
+
+    final static String[] THIRD_PARTY_CALLER_ID_APPS =
+            new String[]{"tw.nicky.HDCallerID",           // https://play.google.com/store/apps/details?id=tw.nicky.HDCallerID
+                    "com.androminigsm.fsci",              // https://play.google.com/store/apps/details?id=com.androminigsm.fsci
+                    "com.androminigsm.fscifree",          // https://play.google.com/store/apps/details?id=com.androminigsm.fscifree
+                    "com.isodroid.fsci.view.CallActivity" // the Activity for the fsci app above
+            };
 
     public void onReceive(Context context, Intent intent) {
         final String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
@@ -62,9 +79,25 @@ public class CustomPhoneStateListener extends BroadcastReceiver {
 
         Log.d(mTAG, "Class on top of UI is: " + topmostActivityClass);
 
+        boolean isIncomingCallScreenVisible = false;
+
         if (topmostActivityClass.contains("com.android.phone.") &&
                 topmostActivityClass.contains("InCallScreen")) {
-            Log.i(mTAG, "Incoming call screen is on top - launch MainActivity for call from " + callingNumber);
+            Log.i(mTAG, "Incoming call screen is on top");
+            isIncomingCallScreenVisible = true;
+        } else {
+            // Cope when a 3rd party caller ID app might put itself on
+            // top of Flashback
+            for (String thirdPartyCallerIDApp : THIRD_PARTY_CALLER_ID_APPS) {
+                if (topmostActivityClass.contains(thirdPartyCallerIDApp)) {
+                    Log.i(mTAG, thirdPartyCallerIDApp + " is on top - bring Flashback to front");
+                    isIncomingCallScreenVisible = true;
+                }
+            }
+        }
+
+        if (isIncomingCallScreenVisible) {
+            Log.i(mTAG, "Launch MainActivity for call from " + callingNumber);
 
             Intent launchMainActivity = new Intent(context, MainActivity.class);
             launchMainActivity.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, callingNumber);
@@ -75,6 +108,8 @@ public class CustomPhoneStateListener extends BroadcastReceiver {
             // FLAG_ACTIVITY_NEW_TASK flag.  Without it you get an AndroidRuntimeException.
             launchMainActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+            Log.i(mTAG, "Incoming call screen is NOT on top - try again in " +
+                    LAUNCH_RETRY_PERIOD_MILLIS + "ms");
             // As the API docs say:
             //
             //   "If an activity is ever started via any non-user-driven events
