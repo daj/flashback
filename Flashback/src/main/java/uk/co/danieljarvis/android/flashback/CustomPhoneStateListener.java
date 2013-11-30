@@ -62,9 +62,20 @@ public class CustomPhoneStateListener extends BroadcastReceiver {
 
         Log.d(mTAG, "Class on top of UI is: " + topmostActivityClass);
 
+        boolean isIncomingCallScreenVisible = false;
+
         if (topmostActivityClass.contains("com.android.phone.") &&
                 topmostActivityClass.contains("InCallScreen")) {
-            Log.i(mTAG, "Incoming call screen is on top - launch MainActivity for call from " + callingNumber);
+            Log.i(mTAG, "Incoming call screen is on top");
+            isIncomingCallScreenVisible = true;
+        } else if (topmostActivityClass.contains("com.android.") &&
+                topmostActivityClass.contains("InCallActivity")) {
+            Log.i(mTAG, "Incoming call screen is on top (OS 4.4)");
+            isIncomingCallScreenVisible = true;
+        }
+
+        if (isIncomingCallScreenVisible) {
+            Log.i(mTAG, "Launch MainActivity for call from " + callingNumber);
 
             Intent launchMainActivity = new Intent(context, MainActivity.class);
             launchMainActivity.putExtra(TelephonyManager.EXTRA_INCOMING_NUMBER, callingNumber);
