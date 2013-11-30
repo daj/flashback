@@ -387,11 +387,11 @@ public class MainActivity extends Activity {
         int titleBarHeight = getStatusBarHeight();
 
         // The width is always the same
-        int desiredWidth = 450;
+        int desiredWidth = context.getResources().getDimensionPixelSize(R.dimen.desired_width);
 
         // Start out allowing only for the header thickness (with the Close
         // button in it)
-        int desiredHeight = 80;
+        int desiredHeight = context.getResources().getDimensionPixelSize(R.dimen.desired_height);
 
         if (xiList.isEmpty()) {
             Log.i(mTAG, "No records");
@@ -493,10 +493,6 @@ public class MainActivity extends Activity {
 
         this.setContentView(layout);
     }
-
-    private static final int LOW_DPI_STATUS_BAR_HEIGHT = 19;
-    private static final int MEDIUM_DPI_STATUS_BAR_HEIGHT = 25;
-    private static final int HIGH_DPI_STATUS_BAR_HEIGHT = 38;
 
     /**
      * @return an estimate of status bar height in pixels.
