@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="uk.co.danieljarvis.android.flashback"
+    android:installLocation="auto"
+    android:versionCode="14"
+    android:versionName="1.14">
+
+    <uses-sdk
+        android:targetSdkVersion="19"
+        android:minSdkVersion="7" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+    <!-- Needed to figure out when the incoming call screen is on top -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+    <application
+        android:icon="@drawable/icon"
+        android:label="Flashback">
+
+        <receiver android:name="CustomPhoneStateListener">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name="MainActivity"
+            android:icon="@drawable/icon"
+            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:background="@drawable/custom_border">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="no_records_number">Não há chamadas ou mensagens de / para este número</string>
+  <string name="no_records_person">Não há chamadas ou mensagens de / para essa pessoa</string>
+  <string name="help_text">Obrigado por utilizar o Flashback! Flashback é executado automaticamente quando você receber um telefonema, para que você não precisa iniciá-lo aqui.</string>  
+</resources>

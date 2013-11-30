@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/toast_layout_root"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@drawable/custom_border"
+              android:padding="5dp"
+              >
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	            android:orientation="horizontal"
+	            android:layout_width="fill_parent"
+	            android:layout_height="38dp"
+	            >                    
+      <TextView android:id="@+id/contact_name"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="left|center_vertical"
+		        android:layout_marginLeft="10dp"
+		        android:layout_weight="1"
+		        android:textColor="#FFF"
+		        android:textSize="20sp"
+		        android:ellipsize="end" 
+                android:singleLine="true"
+		        android:lines="1"
+		        />       
+	  <ImageButton android:id="@+id/close"
+	               android:src="@drawable/close"                
+	               android:background="@null"
+	               android:layout_width="38dp"
+	               android:layout_height="fill_parent"
+	               android:layout_gravity="right|top"
+	               android:clickable="true"
+	               android:onClick="onCloseClick"
+	               />    
+  </LinearLayout>		          
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/toast_rows"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                >
+  </LinearLayout> 
+</LinearLayout>

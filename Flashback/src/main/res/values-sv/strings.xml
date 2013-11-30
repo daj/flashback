@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="no_records_number">Inga samtal eller meddelanden från detta numret</string>
+  <string name="no_records_person">Inga samtal eller meddelanden från denna personen</string>
+  <string name="help_text">Tack för att du använder Flashback! Programmet körs automatiskt när du får ett samtal.</string>  
+</resources>

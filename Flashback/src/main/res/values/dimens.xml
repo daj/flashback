@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="padding_top">10dip</dimen>
+    <dimen name="padding_top_ICS">250dip</dimen>
+    <dimen name="padding_left">10dip</dimen>
+    <dimen name="padding_bottom">150dip</dimen>
+    <dimen name="row_height">90dip</dimen>
+    <dimen name="toast_line_height">50dip</dimen>
+
+</resources>

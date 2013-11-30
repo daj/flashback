@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="no_records_number">Keine Anrufe oder Nachrichten an / von dieser Nummer</string>
+  <string name="no_records_person">Keine Anrufe oder Nachrichten zu / von dieser Person</string>
+  <string name="help_text">Vielen Dank fur den Flashback! Flashback läuft automatisch ab, wenn Sie einen Telefonanruf erhalten, so dass Sie nicht brauchen, um es hier zu starten.</string>  
+</resources>

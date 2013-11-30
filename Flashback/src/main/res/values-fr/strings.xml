@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="no_records_number">Pas d\'appels ou des messages vers / à partir de ce numéro</string>
+  <string name="no_records_person">Pas d\'appels ou des messages vers / à partir de cette personne</string>
+  <string name="help_text">Merci d\'utiliser Flashback! Flashback s\'exécute automatiquement lorsque vous recevez un appel téléphonique, de sorte que vous n\'avez pas besoin de le lancer ici.</string>
+</resources>

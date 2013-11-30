@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Flashback/Flashback.iml" filepath="$PROJECT_DIR$/Flashback/Flashback.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flashback.iml" filepath="$PROJECT_DIR$/flashback.iml" />
+    </modules>
+  </component>
+</project>
+

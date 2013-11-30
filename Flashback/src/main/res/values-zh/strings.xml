@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="no_records_number">沒有任何記録關於此來電者</string>
+  <string name="no_records_person">沒有任何記録關於此來電者</string>
+  <string name="help_text">感谢您使用闪述！闪述自动运行，当你接到一个电话，所以你不需要从这里启动。</string>
+</resources>
