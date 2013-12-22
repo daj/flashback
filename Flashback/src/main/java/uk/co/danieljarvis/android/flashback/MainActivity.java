@@ -392,13 +392,12 @@ public class MainActivity extends Activity {
 
         // Work out how big our popup is going to be
         int titleBarHeight = getStatusBarHeight();
-        int headerRow = context.getResources().getDimensionPixelSize(R.dimen.header_height);
+        int headerRow = mRowHeight;
 
         // The width is always the same
         int desiredWidth = context.getResources().getDimensionPixelSize(R.dimen.desired_width);
 
-        // Start out allowing only for the header thickness (with the Close
-        // button in it)
+        // Start out allowing only for the header thickness (with the Close button in it)
         int desiredHeight = headerRow;
 
         Display display = getWindowManager().getDefaultDisplay();

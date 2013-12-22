@@ -3,7 +3,6 @@
 
     <dimen name="padding_general">8dip</dimen>
     <dimen name="padding_top_ICS">75dip</dimen>
-    <dimen name="header_height">38dip</dimen>
     <dimen name="image_height">38dip</dimen>
     <dimen name="desired_width">450dip</dimen>
 
