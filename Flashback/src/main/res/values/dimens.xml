@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="padding_top">10dip</dimen>
-    <dimen name="padding_top_ICS">250dip</dimen>
-    <dimen name="padding_left">10dip</dimen>
-    <dimen name="padding_bottom">150dip</dimen>
-    <dimen name="row_height">90dip</dimen>
-    <dimen name="toast_line_height">50dip</dimen>
-    <dimen name="desired_height">80dip</dimen>
+    <dimen name="padding_general">8dip</dimen>
+    <dimen name="padding_top_ICS">75dip</dimen>
+    <dimen name="header_height">38dip</dimen>
+    <dimen name="image_height">38dip</dimen>
     <dimen name="desired_width">450dip</dimen>
 
 </resources>

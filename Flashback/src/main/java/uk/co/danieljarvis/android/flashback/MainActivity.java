@@ -15,12 +15,6 @@
  */
 package uk.co.danieljarvis.android.flashback;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -51,6 +45,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class MainActivity extends Activity {
     final static String mTAG = "Flashback";
 
@@ -59,27 +59,23 @@ public class MainActivity extends Activity {
     LayoutInflater mLayoutInflater;
 
     private int mMaxNumberOfToasts = 5;
-    private int mTextMsgLengthChars = 200;
 
-    private int mPaddingLeft;
-    private int mPaddingTop;
+    // The call answer buttons are 65% of the way down the screen or lower.
+    //
+    // Make sure you allow room for the Accept and Decline buttons on the dialer.  The user
+    // should always be able to handle the call without having to close Flashback first.
+    private final float mAnswerButtonYOffsetMultiplier = 0.65f;
+    private int mMaxYOffset;
+
+    private int mPadding;
     private int mPaddingTopICS;
 
-    private int mToastLineHeight;
     private int mDesiredHeight;
 
     private KeyguardManager mKeyguardMgr;
     private KeyguardLock mKeyguardLock = null;
 
     boolean mDidDisableKeyguard = false;
-
-    // Allow room for the Accept and Decline buttons on the dialer.  The
-    // user should always be able to handle the call without having to
-    // close Flashback first.
-    //
-    // They mostly appear at the bottom of the screen, but on some devices
-    // they are slightly up from the bottom.
-    private int mPaddingBottom;
 
     private int mRowHeight;
 
@@ -99,14 +95,10 @@ public class MainActivity extends Activity {
 
         Resources res = getResources();
 
-        mPaddingBottom = res.getDimensionPixelSize(R.dimen.padding_bottom);
-        mPaddingLeft = res.getDimensionPixelSize(R.dimen.padding_left);
-        mPaddingTop = res.getDimensionPixelSize(R.dimen.padding_top);
+        mPadding = res.getDimensionPixelSize(R.dimen.padding_general);
         mPaddingTopICS = res.getDimensionPixelSize(R.dimen.padding_top_ICS);
 
-        mToastLineHeight = res.getDimensionPixelSize(R.dimen.toast_line_height);
-
-        mRowHeight = res.getDimensionPixelSize(R.dimen.row_height);
+        mRowHeight = (2 * mPadding) + res.getDimensionPixelSize(R.dimen.image_height);
 
         Intent intent = getIntent();
         final String number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
@@ -400,13 +392,25 @@ public class MainActivity extends Activity {
 
         // Work out how big our popup is going to be
         int titleBarHeight = getStatusBarHeight();
+        int headerRow = context.getResources().getDimensionPixelSize(R.dimen.header_height);
 
         // The width is always the same
         int desiredWidth = context.getResources().getDimensionPixelSize(R.dimen.desired_width);
 
         // Start out allowing only for the header thickness (with the Close
         // button in it)
-        int desiredHeight = context.getResources().getDimensionPixelSize(R.dimen.desired_height);
+        int desiredHeight = headerRow;
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point screenSize = getSize(display);
+
+        int screenWidth = screenSize.x;
+        int screenHeight = screenSize.y;
+        Log.i(mTAG, "Screen size : " + screenWidth + " x " + screenHeight);
+        Log.d(mTAG, "Row height " + mRowHeight);
+
+        mMaxYOffset = (int) (((float) screenHeight) * mAnswerButtonYOffsetMultiplier);
+        Log.i(mTAG, "Expected answer button offset : " + mMaxYOffset);
 
         if (xiList.isEmpty()) {
             Log.i(mTAG, "No records");
@@ -433,6 +437,8 @@ public class MainActivity extends Activity {
 
             Collections.sort(xiList, new ToastListItem(0, null, false, -1));
 
+            int currentYOffset = titleBarHeight + mPadding + headerRow;
+
             int count = 1;
 
             ImageView image = null;
@@ -441,8 +447,13 @@ public class MainActivity extends Activity {
             View toastRow = null;
 
             for (ToastListItem cl : xiList) {
+
+                currentYOffset += mRowHeight;
+
                 // Only show the latest 5 lines
-                if (count <= mMaxNumberOfToasts) {
+                if ((count <= mMaxNumberOfToasts) && (currentYOffset < mMaxYOffset)) {
+                    Log.d(mTAG, "Row " + count + " offset : " + currentYOffset);
+
                     toastRow = mLayoutInflater.inflate(R.layout.toast_row, null);
 
                     image = (ImageView) toastRow.findViewById(R.id.image);
@@ -456,13 +467,6 @@ public class MainActivity extends Activity {
 
                     if (cl.mMsgText != null) {
                         String msg = cl.mMsgText;
-
-                        if (msg.length() > mTextMsgLengthChars) {
-                            // Defensively truncate really long text messages (this code
-                            // was originally to manually add the ellipsis at the end, but
-                            // now I do that through the layout file).
-                            msg = msg.substring(0, mTextMsgLengthChars);
-                        }
 
                         Log.d(mTAG, count + ": " + msg);
                         text.setText(msg);
@@ -484,23 +488,15 @@ public class MainActivity extends Activity {
         mDesiredHeight = desiredHeight;
         Log.d(mTAG, "Desired dimensions: " + desiredWidth + " x " + desiredHeight);
 
-        // Now adjust the activity size based on the actual screen size
-        Display display = getWindowManager().getDefaultDisplay();
-        Point screenSize = getSize(display);
-        int screenWidth = screenSize.x;
-        int screenHeight = screenSize.y;
-        Log.i(mTAG, "Screen size : " + screenWidth + " x " + screenHeight);
-
         // Allow for the padding
-        screenWidth = screenWidth - (2 * mPaddingLeft);
-        screenHeight = screenHeight - titleBarHeight - mPaddingTop - mPaddingBottom;
+        screenWidth = screenWidth - (2 * mPadding);
 
         if (desiredWidth > screenWidth) {
             desiredWidth = screenWidth;
         }
 
-        if (desiredHeight > screenHeight) {
-            desiredHeight = screenHeight;
+        if (desiredHeight > mMaxYOffset) {
+            desiredHeight = mMaxYOffset;
         }
 
         Log.i(mTAG, "Flashback size : " + desiredWidth + " x " + desiredHeight);
@@ -760,17 +756,17 @@ public class MainActivity extends Activity {
 
         Log.d(mTAG, "Original offset: " + lp.x + " x " + lp.y);
 
-        lp.x = mPaddingLeft;
-        lp.y = mPaddingTop + getStatusBarHeight();
+        lp.x = mPadding;
+        lp.y = mPadding + getStatusBarHeight();
 
         Display display = getWindowManager().getDefaultDisplay();
         Point screenSize = getSize(display);
         int screenHeight = screenSize.y;
 
         // On ICS devices we want to position Flashback so it doesn't cover
-        // the contact number at the top, or the blue bar
+        // the contact number at the top
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) &&
-                (screenHeight > (mDesiredHeight + mPaddingTopICS + mPaddingBottom))) {
+                (screenHeight > (mDesiredHeight + mPaddingTopICS))) {
             Log.d(mTAG, "Adjust offset for ICS");
             lp.y += mPaddingTopICS;
         }

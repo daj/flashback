@@ -2,14 +2,14 @@
               android:id="@+id/toast_layout_root"
               android:orientation="vertical"
               android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+              android:layout_height="wrap_content"
               android:background="@drawable/custom_border"
-              android:padding="5dp"
+              android:padding="@dimen/padding_general"
               >
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	            android:orientation="horizontal"
 	            android:layout_width="fill_parent"
-	            android:layout_height="38dp"
+	            android:layout_height="@dimen/header_height"
 	            >                    
       <TextView android:id="@+id/contact_name"
 		        android:layout_width="wrap_content"
@@ -26,8 +26,8 @@
 	  <ImageButton android:id="@+id/close"
 	               android:src="@drawable/close"                
 	               android:background="@null"
-	               android:layout_width="38dp"
-	               android:layout_height="fill_parent"
+	               android:layout_width="@dimen/image_height"
+	               android:layout_height="@dimen/image_height"
 	               android:layout_gravity="right|top"
 	               android:clickable="true"
 	               android:onClick="onCloseClick"
@@ -37,7 +37,7 @@
                 android:id="@+id/toast_rows"
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 >
   </LinearLayout> 
 </LinearLayout>
